@@ -13,7 +13,7 @@ const init = async () => {
 	await initSettings();
 	document.addEventListener("mouseup", handleMouseUp);
 	document.addEventListener("keydown", handleKeyDown);
-	window.addEventListener("unload", onUnload, { once: true });
+	document.addEventListener("visibilitychange", handleVisibilityChange);
 	browser.storage.onChanged.addListener(handleSettingsChange);
 	browser.runtime.onMessage.addListener(handleMessage);
 	overWriteLogLevel();
@@ -144,8 +144,12 @@ const handleKeyDown = (e) => {
 	}
 };
 
-const onUnload = () => {
-	browser.storage.onChanged.removeListener(handleSettingsChange);
+const handleVisibilityChange = () => {
+	if (document.visibilityState === "hidden") {
+		browser.storage.onChanged.removeListener(handleSettingsChange);
+	} else {
+		browser.storage.onChanged.addListener(handleSettingsChange);
+	}
 };
 
 let isEnabled = true;

@@ -77,7 +77,9 @@ const sendRequestToGoogle = async (word, sourceLang, targetLang) => {
 		resultData.candidateText = result.data.dict
 			.map(
 				(dict) =>
-					`${dict.pos}${dict.pos != "" ? ": " : ""}${dict.terms.join(", ")}\n`
+					`${dict.pos}${dict.pos != "" ? ": " : ""}${
+						dict.terms !== undefined ? dict.terms.join(", ") : ""
+					}\n`
 			)
 			.join("");
 	}
